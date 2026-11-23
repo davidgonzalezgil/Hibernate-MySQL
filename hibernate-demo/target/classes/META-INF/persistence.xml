@@ -8,7 +8,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>com.example.Actor</class>
         <class>com.example.Pelicula</class>
-    
+        <class>com.example.Film</class>
 
         <properties>
             <!-- Configuración de conexión a la base de datos Sakila -->

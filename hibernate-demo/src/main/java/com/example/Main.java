@@ -60,6 +60,31 @@ public class Main {
                     System.out.println("Tras rollback: " + pelicula.getTarifa());
                 }
             }
+
+            // actividad SAKILA
+            System.out.println("\n--- LISTADO COMPLETO DE ACTORES (ORDENADOS POR ID) ---");
+            List<Actor> todosActores = em.createQuery("from Actor a order by a.actorId", Actor.class)
+                    .getResultList();
+
+            for (Actor a : todosActores) {
+                System.out.println(a.getActorId() + " | " + a.getFirstName() + " | " + a.getLastName());
+            }
+            System.out.println("Total de actores: " + todosActores.size());
+
+            System.out.println("\n--- PELÍCULAS DEL ACTOR CON ID 1 ---");
+            Actor actor1 = em.find(Actor.class, (short) 1);
+            if (actor1 != null) {
+                System.out.println("Actor: " + actor1.getFirstName() + " " + actor1.getLastName());
+
+                List<Film> peliculasActor1 = actor1.getFilms();
+                peliculasActor1.sort((f1, f2) -> f1.getTitle().compareToIgnoreCase(f2.getTitle()));
+
+                for (Film f : peliculasActor1) {
+                    System.out.println("- " + f.getTitle());
+                }
+                System.out.println("Total de películas del actor 1: " + peliculasActor1.size());
+            }
+
         } finally {
             em.close();
             emf.close();

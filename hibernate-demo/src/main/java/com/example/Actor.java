@@ -1,7 +1,17 @@
 package com.example;
 
-import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "actor")
@@ -20,6 +30,13 @@ public class Actor {
 
     @Column(name = "last_update", insertable = false, updatable = false)
     private Timestamp lastUpdate;
+
+    // Relación N:M mediante la tabla intermedia film_actor:
+    // - actor_id (joinColumns) es la columna que enlaza con la entidad Actor.
+    // - film_id (inverseJoinColumns) es la columna que enlaza con la entidad Film.
+    @ManyToMany
+    @JoinTable(name = "film_actor", joinColumns = @JoinColumn(name = "actor_id"), inverseJoinColumns = @JoinColumn(name = "film_id"))
+    private List<Film> films;
 
     public Actor() {
     }
@@ -55,6 +72,14 @@ public class Actor {
 
     public Timestamp getLastUpdate() {
         return lastUpdate;
+    }
+
+    public List<Film> getFilms() {
+        return films;
+    }
+
+    public void setFilms(List<Film> films) {
+        this.films = films;
     }
 
     @Override
