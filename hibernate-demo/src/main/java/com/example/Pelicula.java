@@ -1,13 +1,7 @@
 package com.example;
 
 import java.math.BigDecimal;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "film")
@@ -16,21 +10,31 @@ public class Pelicula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id")
-    private Short id;
+    private Integer id;
 
-    @Column(name = "title", nullable = false, length = 128)
+    @Column(name = "title")
     private String titulo;
 
-    @Column(name = "language_id", nullable = false)
-    private Byte idiomaId;
+    @Column(name = "language_id")
+    private Integer idiomaId;
 
-    @Column(name = "rental_rate", nullable = false, precision = 4, scale = 2)
+    @Column(name = "rental_rate")
     private BigDecimal tarifa;
 
-    public Pelicula() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "language_id", insertable = false, updatable = false)
+    private Idioma idioma;
+
+    protected Pelicula() {
     }
 
-    public Short getId() {
+    public Pelicula(String titulo, Integer idiomaId, BigDecimal tarifa) {
+        this.titulo = titulo;
+        this.idiomaId = idiomaId;
+        this.tarifa = tarifa;
+    }
+
+    public Integer getId() {
         return id;
     }
 
@@ -38,28 +42,15 @@ public class Pelicula {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public Byte getIdiomaId() {
-        return idiomaId;
-    }
-
-    public void setIdiomaId(Byte idiomaId) {
-        this.idiomaId = idiomaId;
-    }
-
     public BigDecimal getTarifa() {
         return tarifa;
     }
 
-    public void setTarifa(BigDecimal tarifa) {
-        this.tarifa = tarifa;
+    public Idioma getIdioma() {
+        return idioma;
     }
 
-    @Override
-    public String toString() {
-        return id + " - " + titulo + " (" + tarifa + " €)";
+    public void setTarifa(BigDecimal tarifa) {
+        this.tarifa = tarifa;
     }
 }
